@@ -1,0 +1,62 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions' //扩展插件
+
+apply plugin: 'kotlin-kapt'  //kapt3插件
+
+android {
+    compileSdkVersion rootProject.ext.android.targetSdkVersion
+    defaultConfig {
+        applicationId "yonky.yiqikotlin"
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.activity_splash.runner.AndroidJUnitRunner"
+//        javaCompileOptions {
+//            annotationProcessorOptions {
+//                includeCompileClasspath true
+//            }
+//        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    // Support库
+    implementation rootProject.ext.supportLibs
+    // 网络请求库
+    implementation rootProject.ext.networkLibs
+    // RxJava2
+    implementation rootProject.ext.rxJavaLibs
+    implementation rootProject.ext.otherLibs
+    // APT dependencies(Kotlin内置的注解处理器)
+    kapt rootProject.ext.annotationProcessorLibs
+
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    //kotlin 支持库
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    //Logger
+    implementation 'com.orhanobut:logger:2.2.0'
+    //leakCanary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    //运行时权限
+    implementation 'me.weyye.hipermission:library:1.0.7'
+}
