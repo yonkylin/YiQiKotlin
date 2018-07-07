@@ -49,7 +49,11 @@ dependencies {
     // APT dependencies(Kotlin内置的注解处理器)
     kapt rootProject.ext.annotationProcessorLibs
 
+    implementation project(':multiple-status-view')
+
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+
+    implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.4'
     //kotlin 支持库
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //Logger

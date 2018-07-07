@@ -13,7 +13,6 @@ import me.weyye.hipermission.PermissionItem
 import yonky.yiqikotlin.R
 import yonky.yiqikotlin.base.BaseActivity
 import yonky.yiqikotlin.showToast
-import yonky.yiqikotlin.v.main.MainActivity
 
 /**
  * Created by Administrator on 2018/7/6.
@@ -27,7 +26,7 @@ class SplashActivity:BaseActivity(){
     }
 
 
-    override fun getLayout(): Int = R.layout.activity_splash
+    override fun getLayoutId(): Int = R.layout.activity_splash
 
     override fun initData() {
     }
@@ -79,7 +78,7 @@ class SplashActivity:BaseActivity(){
                     }
 
                     override fun onFinish() {
-                        showToast("初始化完毕！")
+//                        showToast("初始化完毕！")
                         layout_splash.startAnimation(alphaAnimation)
                     }
 

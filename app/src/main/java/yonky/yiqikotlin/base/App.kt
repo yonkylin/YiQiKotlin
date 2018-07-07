@@ -28,8 +28,8 @@ class App : Application() {
             private set
 
         fun getRefWatcher(context: Context): RefWatcher? {
-
-            return instance!!.refWatcher
+            val myApplication = context.applicationContext as App
+            return myApplication.refWatcher
         }
     }
 

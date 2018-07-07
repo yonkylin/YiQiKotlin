@@ -1,8 +1,7 @@
 package yonky.yiqikotlin.base
 
-import android.app.Activity
 import android.os.Bundle
-import android.os.PersistableBundle
+import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import yonky.yiqikotlin.utils.CleanLeakUtils
 
@@ -15,7 +14,7 @@ abstract  class BaseActivity:AppCompatActivity(){
         super.onCreate(savedInstanceState)
 
 
-        setContentView(getLayout())
+        setContentView(getLayoutId())
         App.instance?.addActivity(this)
         initData()
         initView()
@@ -23,7 +22,7 @@ abstract  class BaseActivity:AppCompatActivity(){
     }
 
     override fun onDestroy() {
-        CleanLeakUtils.fixInputMethodManagerLeak(this)
+//        CleanLeakUtils.fixInputMethodManagerLeak(this)
         super.onDestroy()
         App.instance?.removeActivity(this)
 
@@ -33,7 +32,8 @@ abstract  class BaseActivity:AppCompatActivity(){
     /*
     * 加载布局
     * */
-    abstract fun getLayout():Int
+    @LayoutRes
+    abstract fun getLayoutId():Int
 
     /**
      * 初始化数据
