@@ -13,8 +13,8 @@ import yonky.multiple_status_view.MultipleStatusView
  * Created by Administrator on 2018/7/6.
  */
 abstract class BaseFragment: Fragment(){
+    val mContext =activity as Context
     var isViewPrepare = false
-
     var hasLoadData = false
     var mLayoutStatusView: MultipleStatusView? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

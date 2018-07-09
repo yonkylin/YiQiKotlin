@@ -6,22 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import yonky.yiqikotlin.R
+import yonky.yiqikotlin.base.BaseFragment
 
 /**
  * Created by Administrator on 2018/7/7.
  */
-class TestFragment : Fragment(){
-    var mTitle:String = null
+class TestFragment : BaseFragment(){
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.test,null)
+
+    override fun getLayoutId(): Int =R.layout.test
+
+    override fun lazyLoad() {
 
     }
-    companion object {
-        fun getInstance(title :String):TestFragment{
-            val fragment = TestFragment
-            fragment.
-        }
-    }
 
+    override fun initView() {
+
+    }
 }

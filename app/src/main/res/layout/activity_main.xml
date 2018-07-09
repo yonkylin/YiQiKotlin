@@ -1,20 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                xmlns:app="http://schemas.android.com/apk/res-auto">
-<include layout="@layout/topbar"/>
-    <FrameLayout
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
+    <include layout="@layout/topbar"/>
+
+    <yonky.yiqikotlin.widget.MyViewPager
+        android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        android:layout_above="@id/bottomNavigationBar"/>
-    <com.ashokvarma.bottomnavigation.BottomNavigationBar
-        android:id="@+id/bottomNavigationBar"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:bnbMode="mode_fixed"
+        android:layout_height="1dp"
+        android:background="@color/light"/>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottomtab_height"
+        app:tabMode="fixed"
+        app:tabIndicatorHeight="0dp"
+        app:tabTextColor="@color/gray"
+        app:tabSelectedTextColor="@color/colorPrimary"
         />
 
-</RelativeLayout>
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto">-->
+    <!--<include layout="@layout/topbar"/>-->
+    <!--<FrameLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_below="@id/toolbar"-->
+    <!--android:layout_above="@id/bottomNavigationBar"/>-->
+    <!--<com.ashokvarma.bottomnavigation.BottomNavigationBar-->
+    <!--android:id="@+id/bottomNavigationBar"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--app:bnbMode="mode_fixed"-->
+    <!--/>-->
+
+    <!--</RelativeLayout>-->
+
+
+</LinearLayout>

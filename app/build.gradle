@@ -63,4 +63,7 @@ dependencies {
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     //运行时权限
     implementation 'me.weyye.hipermission:library:1.0.7'
+
+    //    图片轮播
+    compile 'com.youth.banner:banner:1.4.10'
 }
