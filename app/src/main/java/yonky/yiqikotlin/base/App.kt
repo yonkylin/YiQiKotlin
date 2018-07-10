@@ -54,12 +54,13 @@ class App : Application() {
      * LOGGER配置
      */
     private fun loggerConfig(){
-        val formatStrategy=PrettyFormatStrategy.newBuilder()
-                .showThreadInfo(false)// 隐藏线程信息 默认：显示
-                .methodCount(0)// 决定打印多少行（每一行代表一个方法）默认：2
-                .tag("yonky")//日志标签
-                .build()
-        Logger.addLogAdapter(object : AndroidLogAdapter(formatStrategy){
+//        val formatStrategy=PrettyFormatStrategy.newBuilder()
+//                .showThreadInfo(false)// 隐藏线程信息 默认：显示
+//                .methodCount(0)// 决定打印多少行（每一行代表一个方法）默认：2
+//                .tag("yonky")//日志标签
+//                .build()
+//        Logger.addLogAdapter(object : AndroidLogAdapter(formatStrategy){
+        Logger.addLogAdapter(object : AndroidLogAdapter(){
             override fun isLoggable(priority: Int, tag: String?): Boolean {
                 return BuildConfig.DEBUG
             }

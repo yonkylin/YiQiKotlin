@@ -10,7 +10,7 @@ import yonky.yiqikotlin.bean.AreaEBean
  */
 interface MainContract{
     interface View: IBaseView {
-        fun showResult(areaABeanList: List<AreaBean>, tag: String)
+        fun showResult(areaBeanList: List<AreaBean>, tag: String)
         fun showE(eList: List<AreaEBean>)
         fun showError(msg:String,errorCode:Int)
     }

@@ -16,6 +16,7 @@ import yonky.yiqikotlin.base.BaseFragment
 import android.widget.TextView
 import kotlinx.android.synthetic.main.tab_item.*
 import kotlinx.android.synthetic.main.tab_item.view.*
+import yonky.yiqikotlin.v.fragment.MainFragment
 
 
 /**
@@ -44,7 +45,7 @@ class MainActivity:BaseActivity(){
 
     override fun initData() {
 
-       fragments.add(TestFragment())
+       fragments.add(MainFragment())
        fragments.add(TestFragment())
        fragments.add(TestFragment())
        fragments.add(TestFragment())

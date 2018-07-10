@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.item_banner.view.*
 import kotlinx.android.synthetic.main.item_my.view.*
 import yonky.yiqikotlin.R
@@ -43,7 +44,7 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
 
 
     val titles = arrayOf("推荐宝贝","精品热卖","每日新款")
-   private  val bannerList=ArrayList<AreaBean>()
+   var bannerList:List<AreaBean>?=null
     val b1List=ArrayList<AreaBean>()
     val b2List=ArrayList<AreaBean>()
     val c1List=ArrayList<AreaBean>()
@@ -67,7 +68,7 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     override fun getItemCount(): Int {
-        val countBaner =if(bannerList.size==0) 0 else 1
+        val countBaner =if(bannerList ==null) 0 else 1
         val countB1 =if(b1List.size==0) 0 else 1
         val countB2 =if(b2List.size ==0) 0 else 1
         val countC1 = if(c1List.size==0) 0 else 1
@@ -75,7 +76,8 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
         val countD =if(dList.size ==0) 0 else 1
         val countE=eList.size*5
 
-        return 1+3+countBaner+countB1+countB2+countC1+countC2+countD+countE
+        return 2
+//        return 1+3+countBaner+countB1+countB2+countC1+countC2+countD+countE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -90,11 +92,17 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
     }
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val images =ArrayList<String?>()
-        if(holder is BannerViewHolder &&bannerList.size!=0){
-            for(i:Int in bannerList.indices){
-                images.add(bannerList[i].img_url)
+        if(holder is BannerViewHolder &&bannerList!=null){
+            val list=bannerList
+            for(i:Int in list!!.indices){
+
+              images.add(list[i].img_url)
+
+
             }
-            holder.banner.setImages(images).setImageLoader(GlideUtil()).start()
+            Logger.d(images)
+            holder.itemView.banner.setImages(images).setImageLoader(GlideUtil()).start()
+
             //点击事件
         }else if(holder is MyViewHolder){
             if(position ==1){
@@ -108,7 +116,7 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     inner class BannerViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
-           var banner=itemView.banner
+
     }
 
     inner class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
