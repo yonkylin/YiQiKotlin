@@ -27,25 +27,47 @@ override fun loadDatas(tag: String, zdid: String) {
            })
            .subscribe({ popularItem->
               Logger.d(popularItem)
-              Logger.d(popularItem?.areaA)
-              if(popularItem?.areaA!=null){
+              Logger.d(popularItem?.AreaA)
 
-                 mRootView?.showResult(popularItem.areaA!!,"A")
-
-              }else if(popularItem?.areaB1!=null){
-                 mRootView?.showResult(popularItem.areaB1!!,"B1")
-                 mRootView?.showResult(popularItem.areaB2!!,"B2")
-
-              }else if(popularItem?.areaC1!=null){
-                 mRootView?.showResult(popularItem.areaC1!!,"C1")
-                 mRootView?.showResult(popularItem.areaC2!!,"C2")
-
-              }else if(popularItem?.areaD!=null){
-                 mRootView?.showResult(popularItem.areaD!!,"D")
-
-              }else if(popularItem?.areaE!=null){
-                 mRootView?.showE(popularItem.areaE!!)
-              }
+               popularItem?.AreaA?.let{
+                   mRootView?.showResult(popularItem.AreaA!!,"A")
+               }
+               popularItem?.AreaB1?.let{
+                   mRootView?.showResult(popularItem.AreaB1!!,"B1")
+               }
+               popularItem?.AreaB2?.let{
+                   mRootView?.showResult(popularItem.AreaB2!!,"B2")
+               }
+               popularItem?.AreaC1?.let{
+                   mRootView?.showResult(popularItem.AreaC1!!,"C1")
+               }
+               popularItem?.AreaC2?.let{
+                   mRootView?.showResult(popularItem.AreaC2!!,"C2")
+               }
+               popularItem?.AreaD?.let{
+                   mRootView?.showResult(popularItem.AreaD!!,"D")
+               }
+               popularItem?.AreaE?.let{
+                   mRootView?.showE(popularItem.AreaE!!)
+               }
+//              if(popularItem?.AreaA!=null){
+//
+//
+//              }
+//              else if(popularItem?.AreaB1!=null){
+//
+//
+//
+//              }else if(popularItem?.AreaC1!=null){
+//
+//
+//
+//              }else if(popularItem?.AreaD!=null){
+//
+//
+//              }else if(popularItem?.AreaE!=null){
+//
+//              }
 
            }, { throwable ->
               mRootView?.apply {

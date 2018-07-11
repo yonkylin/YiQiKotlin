@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">YiQiKotlin</string>
+    <string name="price">¥&#160;%.1f</string>
 </resources>

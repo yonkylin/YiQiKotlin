@@ -25,7 +25,7 @@ class GlideUtil : ImageLoader() {
     companion object {
         private val options = RequestOptions().placeholder(R.drawable.default_icon)
 
-        fun loadImage(path: Any, imageView: ImageView) {
+        fun loadImage( path: Any, imageView: ImageView) {
 
             Glide.with(App.instance as Context)
                     .load(path)

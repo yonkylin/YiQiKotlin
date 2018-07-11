@@ -10,12 +10,21 @@ import android.view.ViewGroup
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.item_banner.view.*
 import kotlinx.android.synthetic.main.item_my.view.*
+import kotlinx.android.synthetic.main.item_my_item.view.*
+import kotlinx.android.synthetic.main.item_single_image.view.*
+import kotlinx.android.synthetic.main.item_title.view.*
+import kotlinx.android.synthetic.main.item_vertical.view.*
 import yonky.yiqikotlin.R
 import yonky.yiqikotlin.bean.AreaBean
 import yonky.yiqikotlin.bean.AreaEBean
 import yonky.yiqikotlin.utils.GlideUtil
 import java.io.CharArrayReader
 import kotlin.coroutines.experimental.coroutineContext
+import yonky.yiqikotlin.v.adapter.MainAdapter.SingleViewHolder
+import yonky.yiqikotlin.R.id.iv
+import yonky.yiqikotlin.utils.MyUtil
+
+
 
 /**
  * Created by Administrator on 2018/7/9.
@@ -45,12 +54,12 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
 
     val titles = arrayOf("推荐宝贝","精品热卖","每日新款")
    var bannerList:List<AreaBean>?=null
-    val b1List=ArrayList<AreaBean>()
-    val b2List=ArrayList<AreaBean>()
-    val c1List=ArrayList<AreaBean>()
-    val c2List=ArrayList<AreaBean>()
-    val dList=ArrayList<AreaBean>()
-    val eList=ArrayList<AreaEBean>()
+    var b1List:List<AreaBean>?=null
+    var b2List:List<AreaBean>?=null
+    var c1List:List<AreaBean>?=null
+    var c2List:List<AreaBean>?=null
+    var dList:List<AreaBean>?=null
+    var eList:List<AreaEBean>?=null
 
 
 
@@ -68,56 +77,148 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     override fun getItemCount(): Int {
-        val countBaner =if(bannerList ==null) 0 else 1
-        val countB1 =if(b1List.size==0) 0 else 1
-        val countB2 =if(b2List.size ==0) 0 else 1
-        val countC1 = if(c1List.size==0) 0 else 1
-        val countC2=c2List.size
-        val countD =if(dList.size ==0) 0 else 1
-        val countE=eList.size*5
 
-        return 2
-//        return 1+3+countBaner+countB1+countB2+countC1+countC2+countD+countE
+        val countBaner =if(bannerList ==null) 0 else 1
+        val countB1 =if(b1List ==null) 0 else 1
+        val countB2 =if(b2List ==null) 0 else 1
+        val countC1 = if(c1List ==null) 0 else 1
+        val countC2=c2List?.size?:0
+        val countD =if(dList ==null) 0 else 1
+        val countE=(eList?.size?:0)*5
+
+//        return 2
+        return 1+3+countBaner+countB1+countB2+countC1+countC2+countD+countE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater=LayoutInflater.from(context)
         var holder:RecyclerView.ViewHolder
         when(viewType){
-            TYPE_BANNER ->holder =BannerViewHolder(LayoutInflater.from(context).inflate( R.layout.item_banner,parent,false))
-            else -> holder=MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_my,parent,false))
-
+            TYPE_BANNER ->holder =BannerViewHolder(inflater.inflate( R.layout.item_banner,parent,false))
+            TYPE_MY -> holder=MyViewHolder(inflater.inflate(R.layout.item_my,parent,false))
+            TYPE_TITLE-> holder =TitleViewHolder(inflater.inflate(R.layout.item_title,parent,false))
+            TYPE_SINGLE, TYPE_THREE ->holder =SingleViewHolder(inflater.inflate(R.layout.item_single_image,parent,false))
+            else ->holder =TwoViewHolder(inflater.inflate(R.layout.item_vertical,parent,false))
 
         }
         return holder
     }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val images =ArrayList<String?>()
-        if(holder is BannerViewHolder &&bannerList!=null){
-            val list=bannerList
-            for(i:Int in list!!.indices){
-
-              images.add(list[i].img_url)
-
-
+        when{
+            holder is BannerViewHolder &&bannerList!=null ->{
+                val list=bannerList
+                for(i:Int in list!!.indices){
+                    images.add(list[i].img_url)
+                }
+                holder.itemView.banner.setImages(images).setImageLoader(GlideUtil()).start()
             }
-            Logger.d(images)
-            holder.itemView.banner.setImages(images).setImageLoader(GlideUtil()).start()
 
-            //点击事件
-        }else if(holder is MyViewHolder){
-            if(position ==1){
-                holder.itemAdapter.type=TYPE_ITEM_MY
-            }else if(b2List.size!=0 &&position==4){
-                holder.itemAdapter.b2List=b2List
-                holder.itemAdapter.type=TYPE_ITEM_TJBB
+            holder is MyViewHolder->{
+                if(position ==1){
+                    holder.itemAdapter.type=TYPE_ITEM_MY
+                }else if(b2List!=null &&position==4){
+                    holder.itemAdapter.b2List=b2List
+                    holder.itemAdapter.type=TYPE_ITEM_TJBB
+                }
+                holder.itemAdapter.notifyDataSetChanged()
             }
-            holder.itemAdapter.notifyDataSetChanged()
+
+            holder is TitleViewHolder->{
+                when(position){
+                    2->holder.itemView.tv_title.setText(titles[0])
+                    5->holder.itemView.tv_title.setText(titles[1])
+                    13->holder.itemView.tv_title.setText(titles[2])
+                }
+            }
+
+            holder is SingleViewHolder->{
+                val layoutParams = holder.itemView.iv_single.getLayoutParams()
+                layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                layoutParams.height = MyUtil.dp2px(context, 140)
+                holder.itemView.iv_single.setLayoutParams(layoutParams)
+                if (b1List!=null && position == 3) {
+                   GlideUtil.loadImage(b1List!![0].img_url!!, holder.itemView.iv_single)
+
+                } else if (c1List!=null && position == 6) {
+                    GlideUtil.loadImage(c1List!![0].img_url!!, holder.itemView.iv_single)
+                } else if (c2List !=null && position >= 7 && position <= 12) {
+                    layoutParams.height = MyUtil.dp2px(context, 140)
+                    GlideUtil.loadImage(c2List!![position-7].img_url!!, holder.itemView.iv_single)
+                } else if (eList!=null && position > 14) {
+                    /* 对应位置为
+               15 20 25 30 35
+                    -15
+                0  5  10 15 20
+                        对5取整
+                0  1  2  3  4
+  */
+                    val i = (position - 15) / 5
+                    val bean = eList!![i]?.m_Item1
+                    bean?.let{
+                        bean[0]!!.img_url!!
+                        GlideUtil.loadImage( bean[0]!!.img_url!!, holder.itemView.iv_single)
+                    }
+
+                }
+//                holder.itemView.setOnClickListener(MyClickListener(mContext, bean, TYPE_GOODS))
+            }
+
+            holder is TwoViewHolder && position>14 ->{
+                /* 两列类型的位置为    转为elist对应的位置
+           16 17 18 19               1  2  3  4                             0
+           21 22 23 24               6  7  8  9                             1
+           26 27 28 29       -15得   11 12 13 14      对5取整               2
+           31 32 33 34               16 17 18 19                            3
+           36 37 38 39               21 22 23 24                            4
+         */
+                if(eList!=null){
+                    val i=(position-15)/5;
+                    val j=(position-15)%5 -1;
+                   var bean = eList!![i].m_Item2!![j]
+                    bean?.let{
+
+                    GlideUtil.loadImage(bean.img_url!!,holder.itemView.iv_img)
+                    holder.itemView.title.setText(bean.title);
+                    holder.itemView.tv_price.setText(context.getResources().getString(R.string.price,bean.price));
+
+                }
+//                    holder.itemView.setOnClickListener MyClickListener(mContext, bean, TYPE_GOOD_DETAIL)
+            }
+            }
+
+
+
         }
+//        if(holder is BannerViewHolder &&bannerList!=null){
+//            val list=bannerList
+//            for(i:Int in list!!.indices){
+//
+//              images.add(list[i].img_url)
+//
+//
+//            }
+//            Logger.d(images)
+//            holder.itemView.banner.setImages(images).setImageLoader(GlideUtil()).start()
+//
+//            //点击事件
+//        }else if(holder is MyViewHolder){
+//            if(position ==1){
+//                holder.itemAdapter.type=TYPE_ITEM_MY
+//            }else if(b2List!=null &&position==4){
+//                holder.itemAdapter.b2List=b2List
+//                holder.itemAdapter.type=TYPE_ITEM_TJBB
+//            }
+//            holder.itemAdapter.notifyDataSetChanged()
+//        }
     }
 
-    inner class BannerViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+    inner class BannerViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
+    inner class TitleViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
+    inner class SingleViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
+    inner class TwoViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
 
-    }
 
     inner class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         var rv=itemView.item_rv

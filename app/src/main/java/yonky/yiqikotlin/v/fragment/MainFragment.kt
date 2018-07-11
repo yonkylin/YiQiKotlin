@@ -28,11 +28,13 @@ class MainFragment : BaseFragment(), MainContract.View{
 
        override fun lazyLoad() {
 //           zdid =preferences.getString("regionId","42");
-           mPresenter.loadDatas("A","42");
-//           mPresenter.loadDatas("B",42);
-//           mPresenter.loadDatas("C",42);
-//           mPresenter.loadDatas("D",42);
-//           mPresenter.loadDatas("E",42);
+
+           val zdid ="42"
+           mPresenter.loadDatas("A",zdid);
+           mPresenter.loadDatas("B",zdid);
+           mPresenter.loadDatas("C",zdid);
+           mPresenter.loadDatas("D",zdid);
+           mPresenter.loadDatas("E",zdid);
         }
 
        override fun initView() {
@@ -52,36 +54,25 @@ class MainFragment : BaseFragment(), MainContract.View{
            }
            rv_main.layoutManager=layoutManager
            rv_main.adapter =mainAdapter
+
+           swipe_refresh.setOnRefreshListener { lazyLoad() }
        }
        override fun showResult(areaBeanList: List<AreaBean>, tag: String) {
            Logger.d(areaBeanList)
-           if ("A" == tag) {
-               mainAdapter.bannerList=areaBeanList
-               mainAdapter.notifyDataSetChanged()
+           when(tag){
+               "A"->mainAdapter.bannerList=areaBeanList
+               "B1"->mainAdapter.b1List=areaBeanList
+               "B2"->mainAdapter.b2List=areaBeanList
+               "C1"->mainAdapter.c1List=areaBeanList
+               "C2"->mainAdapter.c2List=areaBeanList
+               "D"->mainAdapter.dList=areaBeanList
            }
-//              else if ("B1" == type) {
-//               mainAdapter.setB1List(areaBeanList)
-//               mainAdapter.notifyDataSetChanged()
-//           } else if ("B2" == type) {
-//               mainAdapter.setB2List(areaBeanList)
-//               mainAdapter.notifyDataSetChanged()
-//               for (i in 0 until areaBeanList.size()) {
-//               }
-//           } else if ("C1" == type) {
-//               mainAdapter.setC1List(areaBeanList)
-//               mainAdapter.notifyDataSetChanged()
-//           } else if ("C2" == type) {
-//               mainAdapter.setC2List(areaBeanList)
-//               mainAdapter.notifyDataSetChanged()
-//           } else if ("D" == type) {
-//               mainAdapter.setDList(areaBeanList)
-//               mainAdapter.notifyDataSetChanged()
-//           }
-//           mSwipeRefreshLayout.setRefreshing(false)
+           mainAdapter.notifyDataSetChanged()
+           swipe_refresh.setRefreshing(false)
        }
 
        override fun showE(eList: List<AreaEBean>) {
-           TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+           mainAdapter.eList=eList
        }
 
        override fun showError(msg: String, errorCode: Int) {

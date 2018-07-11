@@ -24,8 +24,8 @@ import yonky.yiqikotlin.v.adapter.MainAdapter.Companion.TYPE_SERVICE
 class ItemAdapter(val context:Context): RecyclerView.Adapter<ItemAdapter.ItemViewHolder>(){
     val drawables=arrayOf(R.drawable.home_mrxk,R.drawable.home_mtsp,R.drawable.home_scbb,R.drawable.home_scdk, R.drawable.home_wtk)
     var type:Int=0
-    var b2List =ArrayList<AreaBean>()
-    var dList =ArrayList<AreaBean>()
+    var b2List :List<AreaBean>?=null
+    var dList :List<AreaBean>?=null
 
 
 
@@ -36,38 +36,44 @@ class ItemAdapter(val context:Context): RecyclerView.Adapter<ItemAdapter.ItemVie
 
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
-        val layoutParams =holder.iv.layoutParams
+        val layoutParams =holder.itemView.iv.layoutParams
+
+
         when (type) {
             TYPE_ITEM_MY -> {
                 layoutParams.width = MyUtil.dp2px(context, 100)
                 layoutParams.height = MyUtil.dp2px(context, 100)
-                holder.iv.layoutParams = layoutParams
-                holder.iv.setImageResource(drawables[position])
-//                if (position === 0) {
-//                    holder.itemView.setOnClickListener(MyClickListener(context, "mrxk", TYPE_SERVICE))
-//                } else if (position === 1) {
-//                    holder.itemView.setOnClickListener(MyClickListener(mContext, "mtsp", TYPE_SERVICE))
-//                }
+                holder.itemView.iv.layoutParams = layoutParams
+                holder.itemView.iv.setImageResource(drawables[position])
             }
             TYPE_ITEM_TJBB -> {
                 layoutParams.width = MyUtil.dp2px(context, 130)
                 layoutParams.height = MyUtil.dp2px(context, 220)
-                holder.iv.layoutParams = layoutParams
-                val url =dList[position].img_url
-                url?.let{
-                    GlideUtil.loadImage(url, holder.iv)
+                holder.itemView.iv.layoutParams = layoutParams
+
+                if(b2List!=null){
+                    val url =b2List!![position].img_url
+                    url?.let{
+                        GlideUtil.loadImage(url, holder.itemView.iv)
+                    }
                 }
+
 
 //                holder.itemView.setOnClickListener(MyClickListener(mContext, b2List[position], TYPE_GOODS))
             }
             TYPE_ITEM_MRXK -> {
                 layoutParams.width = MyUtil.dp2px(context, 200)
                 layoutParams.height = MyUtil.dp2px(context, 250)
-                holder.iv.layoutParams = layoutParams
-                val url =dList[position].img_url
-                url?.let{
-                    GlideUtil.loadImage(url, holder.iv)
+                holder.itemView.iv.layoutParams = layoutParams
+
+                if(dList!=null){
+                    val url =dList!![position].img_url
+                    url?.let{
+                        GlideUtil.loadImage(url, holder.itemView.iv)
+                    }
                 }
+
+
 
 //                holder.itemView.setOnClickListener(MyClickListener(context, dList[position], TYPE_GOODS))
             }
@@ -78,17 +84,11 @@ class ItemAdapter(val context:Context): RecyclerView.Adapter<ItemAdapter.ItemVie
     override fun getItemCount(): Int {
         when (type) {
             TYPE_ITEM_MY -> return drawables.size
-            TYPE_ITEM_TJBB -> return b2List.size
-            TYPE_ITEM_MRXK -> return dList.size
+            TYPE_ITEM_TJBB -> return b2List?.size?:0
+            TYPE_ITEM_MRXK -> return dList?.size?:0
             else -> return 0
         }
     }
 
-    class ItemViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
-        var iv=itemView.iv
-        init {
-
-        }
-
-    }
+    class ItemViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)
 }

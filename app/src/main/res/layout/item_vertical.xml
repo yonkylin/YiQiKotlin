@@ -11,7 +11,7 @@
         android:layout_height="230dp" />
 
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

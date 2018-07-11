@@ -16,6 +16,8 @@ import yonky.yiqikotlin.base.BaseFragment
 import android.widget.TextView
 import kotlinx.android.synthetic.main.tab_item.*
 import kotlinx.android.synthetic.main.tab_item.view.*
+import kotlinx.android.synthetic.main.topbar.*
+import yonky.yiqikotlin.utils.StatusBarUtil
 import yonky.yiqikotlin.v.fragment.MainFragment
 
 
@@ -55,6 +57,8 @@ class MainActivity:BaseActivity(){
     }
 
     override fun initView() {
+        StatusBarUtil.darkMode(this)
+        StatusBarUtil.setPaddingSmart(this,toolbar)
         viewpager.offscreenPageLimit=4;
         setTabs(tab_layout,layoutInflater,drawables,titles)
 

@@ -1,25 +1,24 @@
 package yonky.yiqikotlin.bean
 
 /**
- * Created by Administrator on 2018/7/10.
+ * Created by Administrator on 2018/7/11.
  */
-class MainPageBean {
+
+data class MainPageBean(
+    val popularize_items_list_get_response: PopularizeItemsListGetResponse,
+    val status_code: Int,
+    val result: String
+)
+
+ class PopularizeItemsListGetResponse{
+     var AreaA: List<AreaBean>?=null
+     var AreaB1: List<AreaBean>? = null
+     var AreaB2: List<AreaBean>? = null
+     var AreaC1: List<AreaBean>? = null
+     var AreaC2: List<AreaBean>? = null
 
 
-    var popularize_items_list_get_response: PopularizeItemsListGetResponseBean? = null
-    var status_code: Int = 0
-    var result: String? = null
+     var AreaD: List<AreaBean>? = null
+     var AreaE: List<AreaEBean>? = null
+ }
 
-
-   class PopularizeItemsListGetResponseBean {
-        var areaA: List<AreaBean>? = null
-        var areaB1: List<AreaBean>? = null
-        var areaB2: List<AreaBean>? = null
-        var areaC1: List<AreaBean>? = null
-        var areaC2: List<AreaBean>? = null
-        var areaD: List<AreaBean>? = null
-        var areaE: List<AreaEBean>? = null
-
-    }
-
-}
