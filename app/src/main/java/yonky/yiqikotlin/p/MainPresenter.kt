@@ -19,7 +19,7 @@ class MainPresenter(context:Context):BasePresenter<MainContract.View>(),MainCont
 //   请求数据
 override fun loadDatas(tag: String, zdid: String) {
    checkViewAttached()
-//   mRootView?.showLoading()
+   mRootView?.showLoading()
    val disposable = mDataManager.getMainPage("android",zdid,tag,"false")
            .map({
               mainPageBean ->mainPageBean.popularize_items_list_get_response
@@ -28,7 +28,7 @@ override fun loadDatas(tag: String, zdid: String) {
            .subscribe({ popularItem->
               Logger.d(popularItem)
               Logger.d(popularItem?.AreaA)
-
+                mRootView?.dismissLoading()
                popularItem?.AreaA?.let{
                    mRootView?.showResult(popularItem.AreaA!!,"A")
                }
@@ -50,27 +50,11 @@ override fun loadDatas(tag: String, zdid: String) {
                popularItem?.AreaE?.let{
                    mRootView?.showE(popularItem.AreaE!!)
                }
-//              if(popularItem?.AreaA!=null){
-//
-//
-//              }
-//              else if(popularItem?.AreaB1!=null){
-//
-//
-//
-//              }else if(popularItem?.AreaC1!=null){
-//
-//
-//
-//              }else if(popularItem?.AreaD!=null){
-//
-//
-//              }else if(popularItem?.AreaE!=null){
-//
-//              }
+
 
            }, { throwable ->
               mRootView?.apply {
+                  dismissLoading()
                  //处理异常
                  showError(ExceptionHandle.handleException(throwable), ExceptionHandle.errorCode)
               }

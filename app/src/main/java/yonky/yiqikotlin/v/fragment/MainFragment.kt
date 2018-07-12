@@ -10,7 +10,9 @@ import yonky.yiqikotlin.base.BaseFragment
 import yonky.yiqikotlin.base.contract.MainContract
 import yonky.yiqikotlin.bean.AreaBean
 import yonky.yiqikotlin.bean.AreaEBean
+import yonky.yiqikotlin.net.exception.ErrorStatus
 import yonky.yiqikotlin.p.MainPresenter
+import yonky.yiqikotlin.showToast
 import yonky.yiqikotlin.v.adapter.MainAdapter
 import yonky.yiqikotlin.v.adapter.MainAdapter.Companion.TYPE_THREE
 import yonky.yiqikotlin.v.adapter.MainAdapter.Companion.TYPE_TWO
@@ -23,6 +25,7 @@ class MainFragment : BaseFragment(), MainContract.View{
          val mainAdapter by lazy{        MainAdapter(mContext)    }
 
         val mPresenter by lazy {       MainPresenter(mContext)   }
+        var isRefresh= false
 
        override fun getLayoutId(): Int = R.layout.fragment_main
 
@@ -52,12 +55,16 @@ class MainFragment : BaseFragment(), MainContract.View{
                    }
                }
            }
+           mLayoutStatusView = status_view
            rv_main.layoutManager=layoutManager
            rv_main.adapter =mainAdapter
 
-           swipe_refresh.setOnRefreshListener { lazyLoad() }
+           swipe_refresh.setOnRefreshListener {
+               isRefresh =true
+               lazyLoad() }
        }
        override fun showResult(areaBeanList: List<AreaBean>, tag: String) {
+            mLayoutStatusView?.showContent()
            Logger.d(areaBeanList)
            when(tag){
                "A"->mainAdapter.bannerList=areaBeanList
@@ -75,15 +82,36 @@ class MainFragment : BaseFragment(), MainContract.View{
            mainAdapter.eList=eList
        }
 
+    /**
+     * 显示错误信息
+     */
        override fun showError(msg: String, errorCode: Int) {
-           TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-       }
+        showToast(msg)
+        if (errorCode == ErrorStatus.NETWORK_ERROR) {
+            mLayoutStatusView?.showNoNetwork()
+        } else {
+            mLayoutStatusView?.showError()
+        }
+    }
 
+
+    /**
+     * 显示 Loading （下拉刷新的时候不需要显示 Loading）
+     */
        override fun showLoading() {
-           TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        Logger.d("showLoadinggggggggggggggggggggggggg")
+//           if(!isRefresh)
+               mLayoutStatusView?.showLoading()
+
        }
 
        override fun dismissLoading() {
-           TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
        }
-   }
+
+    override fun onDestroy() {
+
+        super.onDestroy()
+        mPresenter.detachView()
+    }
+}

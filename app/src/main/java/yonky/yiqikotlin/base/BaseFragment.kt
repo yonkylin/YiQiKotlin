@@ -45,7 +45,7 @@ abstract class BaseFragment: Fragment(){
     }
 
 
-    open val mRetryClickListener:View.OnClickListener =View.OnClickListener {
+    open val mRetryClickListener =View.OnClickListener {
         lazyLoad()
     }
     /**

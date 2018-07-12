@@ -60,11 +60,13 @@ class MainActivity:BaseActivity(){
         StatusBarUtil.darkMode(this)
         StatusBarUtil.setPaddingSmart(this,toolbar)
         viewpager.offscreenPageLimit=4;
+
+
         setTabs(tab_layout,layoutInflater,drawables,titles)
 
         val pagerAdaper =ViewPagerAdaper(supportFragmentManager,fragments)
         viewpager.adapter = pagerAdaper
-
+        tab_layout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewpager))
 
 
 //        初始化底部导航栏
