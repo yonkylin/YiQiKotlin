@@ -13,21 +13,7 @@
         android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <yonky.multiple_status_view.MultipleStatusView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/status_view"
-            app:emptyView="@layout/layout_empty_view"
-            app:errorView="@layout/layout_error_view"
-            app:loadingView="@layout/layout_loading_view"
-            app:noNetworkView="@layout/layout_network_view">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_main"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
-        </yonky.multiple_status_view.MultipleStatusView>
+        <include layout="@layout/my_recyclerview"/>
 
 
     </android.support.v4.widget.SwipeRefreshLayout>

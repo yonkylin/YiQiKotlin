@@ -6,6 +6,8 @@ import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
+import android.widget.FrameLayout
+import android.widget.PopupWindow
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import kotlinx.android.synthetic.main.activity_main.*
@@ -14,10 +16,16 @@ import yonky.yiqikotlin.base.BaseActivity
 import yonky.yiqikotlin.v.fragment.TestFragment
 import yonky.yiqikotlin.base.BaseFragment
 import android.widget.TextView
+import com.google.android.flexbox.FlexDirection.ROW
+import com.google.android.flexbox.FlexWrap.WRAP
+import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.android.synthetic.main.tab_item.*
 import kotlinx.android.synthetic.main.tab_item.view.*
 import kotlinx.android.synthetic.main.topbar.*
+import kotlinx.android.synthetic.main.window_region.view.*
+import yonky.yiqikotlin.utils.MyUtil
 import yonky.yiqikotlin.utils.StatusBarUtil
+import yonky.yiqikotlin.v.adapter.RegionAdapter
 import yonky.yiqikotlin.v.fragment.MainFragment
 
 
@@ -28,9 +36,9 @@ class MainActivity:BaseActivity(){
 
 
     val fragments=ArrayList<BaseFragment>()
-
-//    val preference : SharedPreferences=getSharedPreferences("region",0)
-
+    var mPopupWindow:PopupWindow?=null
+    lateinit var preference : SharedPreferences
+    lateinit var regionSelected: String
     val titles = arrayOf("首页","逛市场","搜款式","采购单","我的")
     val drawables =arrayOf(R.drawable.tab_home_selector,R.drawable.tab_market_selector,R.drawable.tab_style_selector,
             R.drawable.tab_list_selector,R.drawable.tab_me_selector)
@@ -46,6 +54,9 @@ class MainActivity:BaseActivity(){
     override fun getLayoutId(): Int = R.layout.activity_main
 
     override fun initData() {
+        preference=getSharedPreferences("region",0)
+        regionSelected=preference.getString("region","广州")
+
 
        fragments.add(MainFragment())
        fragments.add(TestFragment())
@@ -61,13 +72,16 @@ class MainActivity:BaseActivity(){
         StatusBarUtil.setPaddingSmart(this,toolbar)
         viewpager.offscreenPageLimit=4;
 
-
+        bt_region.setText(regionSelected);
         setTabs(tab_layout,layoutInflater,drawables,titles)
 
         val pagerAdaper =ViewPagerAdaper(supportFragmentManager,fragments)
         viewpager.adapter = pagerAdaper
         tab_layout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewpager))
 
+        bt_region.setOnClickListener(){
+            showRegion()
+        }
 
 //        初始化底部导航栏
 //        bottomNavigationBar
@@ -101,6 +115,28 @@ class MainActivity:BaseActivity(){
     }
 
     override fun start() {
+    }
+
+    private fun showRegion(){
+        if(mPopupWindow==null){
+            val contentView=LayoutInflater.from(this).inflate(R.layout.window_region,null)
+            mPopupWindow =object:PopupWindow(contentView, FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT,true){
+                override fun dismiss() {
+                    super.dismiss()
+//                updateButton()
+                }
+            }
+            val regionManager = FlexboxLayoutManager()
+            regionManager.flexDirection = ROW
+            regionManager.flexWrap = WRAP
+
+            contentView.rv_region1.layoutManager = regionManager
+            contentView.rv_region1.adapter = RegionAdapter(this,regionSelected)
+
+        }
+        mPopupWindow!!.showAsDropDown(bt_region,0,-MyUtil.dp2px(this,5))
+
+
     }
 
 

@@ -5,6 +5,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.my_recyclerview.*
 import yonky.yiqikotlin.R
 import yonky.yiqikotlin.base.BaseFragment
 import yonky.yiqikotlin.base.contract.MainContract
@@ -99,7 +100,6 @@ class MainFragment : BaseFragment(), MainContract.View{
      * 显示 Loading （下拉刷新的时候不需要显示 Loading）
      */
        override fun showLoading() {
-        Logger.d("showLoadinggggggggggggggggggggggggg")
 //           if(!isRefresh)
                mLayoutStatusView?.showLoading()
 

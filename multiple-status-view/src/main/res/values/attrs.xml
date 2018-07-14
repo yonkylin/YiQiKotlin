@@ -7,4 +7,5 @@
         <attr name="noNetworkView" format="reference"/>
         <attr name="contentView" format="reference"/>
     </declare-styleable>
+
 </resources>
