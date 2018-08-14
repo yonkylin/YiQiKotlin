@@ -40,7 +40,7 @@ class AreaBean : Serializable {
 
     //    private static final long serialVersionUID = 1234567890;
 
-    var site_id: String? = null
+    var site_id: String ="48"
     var ad_id: Int = 0
     var page_id: Int = 0
     var pos_id: Int = 0

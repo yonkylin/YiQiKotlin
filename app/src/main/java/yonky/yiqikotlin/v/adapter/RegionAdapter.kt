@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.region_text.view.*
+import yonky.yiqikotlin.MyListener
 import yonky.yiqikotlin.R
 
 /**
@@ -14,6 +15,7 @@ import yonky.yiqikotlin.R
  */
 class RegionAdapter(val mContext:Context,region:String) :RecyclerView.Adapter<RegionAdapter.RegionViewHolder>(){
 
+    var listener:MyListener?=null
 val regions=arrayOf( "广州","42",
         "潮汕","48",
         "新塘","52",
@@ -28,7 +30,7 @@ val regions=arrayOf( "广州","42",
         "揭阳","54",
         "葫芦岛","56")
     var isSelected=0
-  lateinit var editor: SharedPreferences.Editor
+    var editor: SharedPreferences.Editor
     init {
         isSelected = searchString(regions,region)/2
         editor=mContext.getSharedPreferences("data",0).edit()
@@ -49,6 +51,7 @@ val regions=arrayOf( "广州","42",
         holder.itemView.tv_region.setText(regions[position*2])
         holder.itemView.setOnClickListener(){
             setSelect(position)
+            listener?.onClick()
         }
     }
 

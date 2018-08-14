@@ -1,7 +1,7 @@
 package yonky.yiqikotlin.v.adapter
 
 import android.content.Context
-import android.hardware.Camera
+import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.item_banner.view.*
 import kotlinx.android.synthetic.main.item_my.view.*
-import kotlinx.android.synthetic.main.item_my_item.view.*
 import kotlinx.android.synthetic.main.item_single_image.view.*
 import kotlinx.android.synthetic.main.item_title.view.*
 import kotlinx.android.synthetic.main.item_vertical.view.*
@@ -18,18 +17,15 @@ import yonky.yiqikotlin.R
 import yonky.yiqikotlin.bean.AreaBean
 import yonky.yiqikotlin.bean.AreaEBean
 import yonky.yiqikotlin.utils.GlideUtil
-import java.io.CharArrayReader
-import kotlin.coroutines.experimental.coroutineContext
-import yonky.yiqikotlin.v.adapter.MainAdapter.SingleViewHolder
-import yonky.yiqikotlin.R.id.iv
+import yonky.yiqikotlin.listener.MyClickListener
 import yonky.yiqikotlin.utils.MyUtil
-
+import yonky.yiqikotlin.v.GoodsActivity
 
 
 /**
  * Created by Administrator on 2018/7/9.
  */
-class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class MainAdapter(val mContext:Context): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
     companion object {
         val TAG = MainAdapter::class.java.simpleName
 
@@ -91,7 +87,7 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val inflater=LayoutInflater.from(context)
+        val inflater=LayoutInflater.from(mContext)
         var holder:RecyclerView.ViewHolder
         when(viewType){
             TYPE_BANNER ->holder =BannerViewHolder(inflater.inflate( R.layout.item_banner,parent,false))
@@ -105,6 +101,7 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        var bean:AreaBean?=null
         val images =ArrayList<String?>()
         when{
             holder is BannerViewHolder &&bannerList!=null ->{
@@ -113,6 +110,13 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
                     images.add(list[i].img_url)
                 }
                 holder.itemView.banner.setImages(images).setImageLoader(GlideUtil()).start()
+                holder.itemView.banner.setOnBannerListener(){
+                    position ->
+                    val intent= Intent(mContext,GoodsActivity::class.java)
+                    intent.putExtra("areabean",bannerList!![position])
+                    mContext.startActivity(intent)
+
+                }
             }
 
             holder is MyViewHolder->{
@@ -121,6 +125,9 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
                 }else if(b2List!=null &&position==4){
                     holder.itemAdapter.b2List=b2List
                     holder.itemAdapter.type=TYPE_ITEM_TJBB
+                }else if(dList!=null && position==14){
+                    holder.itemAdapter.dList=dList
+                    holder.itemAdapter.type = TYPE_ITEM_MRXK
                 }
                 holder.itemAdapter.notifyDataSetChanged()
             }
@@ -136,15 +143,18 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
             holder is SingleViewHolder->{
                 val layoutParams = holder.itemView.iv_single.getLayoutParams()
                 layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
-                layoutParams.height = MyUtil.dp2px(context, 140)
+                layoutParams.height = MyUtil.dp2px(mContext, 140)
                 holder.itemView.iv_single.setLayoutParams(layoutParams)
                 if (b1List!=null && position == 3) {
+                   bean=b1List!![0]
                    GlideUtil.loadImage(b1List!![0].img_url!!, holder.itemView.iv_single)
 
                 } else if (c1List!=null && position == 6) {
+                    bean =c1List!![0]
                     GlideUtil.loadImage(c1List!![0].img_url!!, holder.itemView.iv_single)
                 } else if (c2List !=null && position >= 7 && position <= 12) {
-                    layoutParams.height = MyUtil.dp2px(context, 140)
+                    bean =c2List!![position-7]
+                    layoutParams.height = MyUtil.dp2px(mContext, 140)
                     GlideUtil.loadImage(c2List!![position-7].img_url!!, holder.itemView.iv_single)
                 } else if (eList!=null && position > 14) {
                     /* 对应位置为
@@ -155,14 +165,18 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
                 0  1  2  3  4
   */
                     val i = (position - 15) / 5
-                    val bean = eList!![i]?.m_Item1
-                    bean?.let{
-                        bean[0]!!.img_url!!
-                        GlideUtil.loadImage( bean[0]!!.img_url!!, holder.itemView.iv_single)
+                    val item1 = eList!![i]?.m_Item1
+                    bean=item1?.let{
+                        item1[0]
+                    }
+                   bean?.let{
+
+                        GlideUtil.loadImage(bean.img_url!!, holder.itemView.iv_single)
                     }
 
                 }
-//                holder.itemView.setOnClickListener(MyClickListener(mContext, bean, TYPE_GOODS))
+                Logger.d(11111)
+                holder.itemView.setOnClickListener(MyClickListener(mContext, bean, TYPE_GOODS))
             }
 
             holder is TwoViewHolder && position>14 ->{
@@ -181,7 +195,7 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
 
                     GlideUtil.loadImage(bean.img_url!!,holder.itemView.iv_img)
                     holder.itemView.title.setText(bean.title);
-                    holder.itemView.tv_price.setText(context.getResources().getString(R.string.price,bean.price));
+                    holder.itemView.tv_price.setText(mContext.getResources().getString(R.string.price,bean.price));
 
                 }
 //                    holder.itemView.setOnClickListener MyClickListener(mContext, bean, TYPE_GOOD_DETAIL)
@@ -222,9 +236,9 @@ class MainAdapter(val context:Context): RecyclerView.Adapter<RecyclerView.ViewHo
 
     inner class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
         var rv=itemView.item_rv
-        val itemAdapter by lazy{ItemAdapter(context) }
+        val itemAdapter by lazy{ItemAdapter(mContext) }
         init{
-            rv.layoutManager =LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false)
+            rv.layoutManager =LinearLayoutManager(mContext,LinearLayoutManager.HORIZONTAL,false)
             rv.adapter=itemAdapter
 
         }

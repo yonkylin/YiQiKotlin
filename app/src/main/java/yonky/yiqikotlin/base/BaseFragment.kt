@@ -54,7 +54,7 @@ abstract class BaseFragment: Fragment(){
     @LayoutRes
     abstract fun getLayoutId():Int
 
-    private fun lazyLoadDataIfPrepared(){
+     fun lazyLoadDataIfPrepared(){
         if(userVisibleHint && isViewPrepare &&!hasLoadData){
             lazyLoad()
             hasLoadData = true

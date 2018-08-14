@@ -22,7 +22,7 @@ class App : Application() {
 
 
     companion object {
-//        var context:Context by Delegates.notNull()
+//        var mContext:Context by Delegates.notNull()
 //            private set
         var instance: App? = null
             private set
@@ -36,7 +36,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-//        context =applicationContext
+//        mContext =applicationContext
         refWatcher =setupLeakCanary()
         loggerConfig()
 

@@ -3,8 +3,12 @@ package yonky.yiqikotlin.net
 import io.reactivex.Observable
 import retrofit2.http.POST
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 import yonky.yiqikotlin.bean.MainPageBean
+import yonky.yiqikotlin.bean.MarketBean
+import yonky.yiqikotlin.bean.ShopPage
+import yonky.yiqikotlin.bean.StyleBean
 
 
 /**
@@ -27,39 +31,39 @@ interface ApiService {
     //    http://api2.17zwd.com/rest/shop/search_shops/?psize=10&orderby=mr&keyword=&bq=&service=&pindex=1&from=android&zdid=48
     //逛市场
 
-    /*@GET("rest/shop/search_shops/")
+    @GET("rest/shop/search_shops/")
     fun getSearchData(@Query("psize") psize: String,
                       @Query("orderby") orderby: String,
-                      @Query("keyword") keyword: String,
-                      @Query("bq") bq: String,
-                      @Query("service") service: String,
+                      @Query("keyword") keyword: String?,
+                      @Query("bq") bq: String?,
+                      @Query("service") service: String?,
                       @Query("pindex") pindex: String,
                       @Query("from") from: String,
-                      @Query("zdid") zdid: String): Observable<MarketBean>*/
+                      @Query("zdid") zdid: String): Observable<MarketBean>
 
     // 搜款式
     //    http://api2.17zwd.com/rest/goods/search?price1=0.0&psize=10&size=&seller_cid=&orderby=mr&color=&keyword=&pindex=1&from=android&price2=9999.0&dtype=sks&zdid=48
 
 
-/*    @GET("/rest/goods/{search}")
+    @GET("/rest/goods/{search}")
     fun getStyleData(@Path("search") type: String,
-                     @Query("shop_id") shop_id: String,
-                     @Query("size") size: String,
-                     @Query("seller_cid") seller_cid: String,
+                     @Query("shop_id") shop_id: String?,
+                     @Query("size") size: String?,
+                     @Query("seller_cid") seller_cid: String?,
                      @Query("pindex") pindex: String,
                      @Query("from") from: String,
                      @Query("price2") price2: String,
                      @Query("dtype") dtype: String,
-                     @Query("zdid") zdid: String,
+                     @Query("zdid") zdid: String?,
                      @Query("price1") price1: String,
                      @Query("psize") psize: String,
                      @Query("orderby") orderby: String,
-                     @Query("color") color: String,
-                     @Query("spm") spm: String,
-                     @Query("keyword") keyword: String,
-                     @Query("mid") mid: String,
-                     @Query("fid") fid: String,
-                     @Query("shadow$_klass_") shadow: String): Observable<StyleBean>*/
+                     @Query("color") color: String?,
+                     @Query("spm") spm: String?,
+                     @Query("keyword") keyword: String?,
+                     @Query("mid") mid: String?,
+                     @Query("fid") fid: String?,
+                     @Query("shadow\$_klass_") shadow: String): Observable<StyleBean>
 
 
     // http://api2.17zwd.com/rest/goods/search?shop_id=26974&size=&seller_cid=&pindex=1&from=android&price2=9999.0&dtype=sks&zdid=48&price1=0.0&psize=10&orderby=mr&color=&spm=c5jEjVMzAhEqMknXPYkPU9EOVa4gg6EKJId8KFy3%2BVE%3D&keyword=
@@ -83,14 +87,13 @@ interface ApiService {
         );*/
     //获取店铺详情
     //    http://api2.17zwd.com/rest/shop/get_shop?shop_id=26974&from=android&user_id=-1&zdid=48&spm=c5jEjVMzAhEqMknXPYkPU9EOVa4gg6EKJId8KFy3%2BVE%3D
-   /* @GET("/rest/shop/get_shop")
+    @GET("/rest/shop/get_shop")
     fun getShop(@Query("shop_id") shop_id: String,
                 @Query("from") from: String,
                 @Query("user_id") user_id: String,
                 @Query("zdid") zdid: String,
                 @Query("spm") spm: String
     ): Observable<ShopPage>
-*/
     //    http://api2.17zwd.com/rest/goods/get_item?goods_id=106373882&from=android&user_id=-1&zdid=48&spm=c5jEjVMzAhEqMknXPYkPU9EOVa4gg6EKJId8KFy3%2BVE%3D
 
    /* @GET("/rest/goods/{item}")

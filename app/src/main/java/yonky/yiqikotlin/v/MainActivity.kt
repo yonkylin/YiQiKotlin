@@ -22,20 +22,28 @@ import com.google.android.flexbox.FlexboxLayoutManager
 import kotlinx.android.synthetic.main.tab_item.*
 import kotlinx.android.synthetic.main.tab_item.view.*
 import kotlinx.android.synthetic.main.topbar.*
+import kotlinx.android.synthetic.main.window_region.*
 import kotlinx.android.synthetic.main.window_region.view.*
+import yonky.yiqikotlin.MyListener
 import yonky.yiqikotlin.utils.MyUtil
 import yonky.yiqikotlin.utils.StatusBarUtil
 import yonky.yiqikotlin.v.adapter.RegionAdapter
 import yonky.yiqikotlin.v.fragment.MainFragment
+import yonky.yiqikotlin.v.fragment.MarketFragment
 
 
 /**
  * Created by Administrator on 2018/7/6.
  */
-class MainActivity:BaseActivity(){
+class MainActivity:BaseActivity(),MyListener{
 
 
     val fragments=ArrayList<BaseFragment>()
+    var mainFragment:BaseFragment?=null
+    val marketFragment:BaseFragment=MarketFragment()
+
+
+
     var mPopupWindow:PopupWindow?=null
     lateinit var preference : SharedPreferences
     lateinit var regionSelected: String
@@ -54,12 +62,12 @@ class MainActivity:BaseActivity(){
     override fun getLayoutId(): Int = R.layout.activity_main
 
     override fun initData() {
-        preference=getSharedPreferences("region",0)
+        preference=getSharedPreferences("data",0)
         regionSelected=preference.getString("region","广州")
 
-
-       fragments.add(MainFragment())
-       fragments.add(TestFragment())
+         mainFragment=MainFragment()
+       fragments.add(mainFragment!!)
+       fragments.add(marketFragment)
        fragments.add(TestFragment())
        fragments.add(TestFragment())
        fragments.add(TestFragment())
@@ -123,7 +131,7 @@ class MainActivity:BaseActivity(){
             mPopupWindow =object:PopupWindow(contentView, FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT,true){
                 override fun dismiss() {
                     super.dismiss()
-//                updateButton()
+                updateButton()
                 }
             }
             val regionManager = FlexboxLayoutManager()
@@ -131,12 +139,32 @@ class MainActivity:BaseActivity(){
             regionManager.flexWrap = WRAP
 
             contentView.rv_region1.layoutManager = regionManager
-            contentView.rv_region1.adapter = RegionAdapter(this,regionSelected)
+            val adapter=RegionAdapter(this,regionSelected)
+            contentView.rv_region1.adapter = adapter
+            adapter.listener=this
+            contentView.halfTransparentView.setOnClickListener(){
+                mPopupWindow?.dismiss()
+            }
+
 
         }
         mPopupWindow!!.showAsDropDown(bt_region,0,-MyUtil.dp2px(this,5))
 
 
+
+    }
+
+
+    private fun updateButton(){
+        val s =preference.getString("region","广州")
+        if(s!=regionSelected){
+            regionSelected =s
+            bt_region.setText(s)
+            for(i in fragments.indices){
+                fragments[i].hasLoadData =false
+                fragments[i].lazyLoadDataIfPrepared()
+            }
+        }
     }
 
 
@@ -155,5 +183,8 @@ class MainActivity:BaseActivity(){
         }
     }
 
-
+    override fun onClick() {
+        mPopupWindow!!.dismiss()
+        updateButton()
+    }
 }

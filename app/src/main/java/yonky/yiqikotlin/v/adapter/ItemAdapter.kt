@@ -75,7 +75,7 @@ class ItemAdapter(val context:Context): RecyclerView.Adapter<ItemAdapter.ItemVie
 
 
 
-//                holder.itemView.setOnClickListener(MyClickListener(context, dList[position], TYPE_GOODS))
+//                holder.itemView.setOnClickListener(MyClickListener(mContext, dList[position], TYPE_GOODS))
             }
         }
 

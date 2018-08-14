@@ -6,4 +6,5 @@ package yonky.yiqikotlin.base
 interface IBaseView{
     fun showLoading()
     fun dismissLoading()
+
 }

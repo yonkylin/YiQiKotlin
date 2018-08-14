@@ -1,6 +1,7 @@
 package yonky.yiqikotlin.v.fragment
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import com.orhanobut.logger.Logger
@@ -25,15 +26,15 @@ class MainFragment : BaseFragment(), MainContract.View{
 
          val mainAdapter by lazy{        MainAdapter(mContext)    }
 
+    lateinit var mPreferences:SharedPreferences
         val mPresenter by lazy {       MainPresenter(mContext)   }
         var isRefresh= false
 
        override fun getLayoutId(): Int = R.layout.fragment_main
 
        override fun lazyLoad() {
-//           zdid =preferences.getString("regionId","42");
+          val zdid =mPreferences.getString("regionId","42");
 
-           val zdid ="42"
            mPresenter.loadDatas("A",zdid);
            mPresenter.loadDatas("B",zdid);
            mPresenter.loadDatas("C",zdid);
@@ -42,6 +43,7 @@ class MainFragment : BaseFragment(), MainContract.View{
         }
 
        override fun initView() {
+           mPreferences = mContext.getSharedPreferences("data", 0)
            mPresenter.attachView(this)
            val layoutManager = GridLayoutManager(mContext, 6, LinearLayoutManager.VERTICAL, false)
            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {

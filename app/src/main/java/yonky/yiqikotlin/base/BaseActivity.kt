@@ -1,5 +1,6 @@
 package yonky.yiqikotlin.base
 
+import android.content.Context
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
@@ -10,9 +11,10 @@ import yonky.yiqikotlin.utils.CleanLeakUtils
  */
 abstract  class BaseActivity:AppCompatActivity(){
 
+    lateinit var mContext: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        mContext = this
 
         setContentView(getLayoutId())
         App.instance?.addActivity(this)
