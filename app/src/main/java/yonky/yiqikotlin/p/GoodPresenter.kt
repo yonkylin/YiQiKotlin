@@ -5,6 +5,7 @@ import com.orhanobut.logger.Logger
 import io.reactivex.schedulers.Schedulers
 import yonky.yiqikotlin.base.BasePresenter
 import yonky.yiqikotlin.base.contract.GoodContract
+import yonky.yiqikotlin.bean.Filter
 import yonky.yiqikotlin.bean.GoodFilterBean
 import yonky.yiqikotlin.bean.ShopBean
 import yonky.yiqikotlin.bean.ShopFilterBean
@@ -18,7 +19,7 @@ class GoodPresenter(context: Context):BasePresenter<GoodContract.View>(),GoodCon
     val mDataManager by lazy{
         DataManager()
     }
-    override fun loadGoods(filter: GoodFilterBean, isLoadingMore: Boolean) {
+    override fun loadGoods(filter: Filter, isLoadingMore: Boolean) {
         val disposable = mDataManager.getStyleData(filter.shop_id,filter.size,filter.seller_cid,filter.pindex,filter.from,filter.price2,
                 filter.dtype,filter.zdid, filter.price1,filter.psize,filter.orderby,filter.color ,filter.spm,filter.keyword,filter.mid,filter.fid)
                 .map { styleBean -> styleBean.goods_items_list_get_response?.items }
@@ -35,8 +36,8 @@ class GoodPresenter(context: Context):BasePresenter<GoodContract.View>(),GoodCon
         addSubscription(disposable)
     }
 
-    override fun loadShop(filter: ShopFilterBean) {
-        val disposable=mDataManager.getShopData(filter.shop_id!!,filter.from,filter.user_id,filter.zdid,filter.spm!!)
+    override fun loadShop(filter: Filter) {
+        val disposable=mDataManager.getShopData(filter.shop_id!!,filter.from,filter.user_id,filter.zdid!!,filter.spm!!)
                 .map { shopPage -> shopPage.shop_item_get_response?.item }
                 .subscribe({shopBean ->
                     if(shopBean!=null)

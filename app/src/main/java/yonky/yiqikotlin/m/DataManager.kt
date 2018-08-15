@@ -1,10 +1,7 @@
 package yonky.yiqikotlin.m
 
 import io.reactivex.Observable
-import yonky.yiqikotlin.bean.MainPageBean
-import yonky.yiqikotlin.bean.MarketBean
-import yonky.yiqikotlin.bean.ShopPage
-import yonky.yiqikotlin.bean.StyleBean
+import yonky.yiqikotlin.bean.*
 import yonky.yiqikotlin.net.RetrofitManager
 import yonky.yiqikotlin.scheduler.SchedulerUtils
 
@@ -49,6 +46,14 @@ class DataManager{
 
     fun getSearchData(psize: String, orderby: String, keyword: String?, bq: String?, service: String?, pindex: String, from: String, zdid: String): Observable<MarketBean> {
         return  RetrofitManager.service.getSearchData(psize, orderby, keyword, bq, service, pindex, from, zdid)
+                .compose(SchedulerUtils.ioToMain())
+    }
+
+
+//    http://api2.17zwd.com/rest/goods/get_item?goods_id=106373882&from=android&user_id=-1&zdid=48&spm=c5jEjVMzAhEqMknXPYkPU9EOVa4gg6EKJId8KFy3%2BVE%3D
+
+    fun getGoodDetail(type: String, goods_id: String, from: String, user_id: String, zdid: String, spm: String): Observable<GoodDetailBean> {
+        return RetrofitManager.service.getGoodDetail(type, goods_id, from, user_id, zdid, spm)
                 .compose(SchedulerUtils.ioToMain())
     }
 

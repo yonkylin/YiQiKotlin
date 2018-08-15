@@ -6,7 +6,7 @@
               android:layout_marginLeft="5dp"
     >
     <ImageView
-        android:id="@+id/iv_img"
+        android:id="@+id/iv_shopImg"
         android:layout_width="match_parent"
         android:layout_height="170dp" />
     <TextView

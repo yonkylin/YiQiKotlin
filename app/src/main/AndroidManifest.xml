@@ -27,6 +27,7 @@
         <activity android:name=".v.MainActivity"
             />
         <activity android:name=".v.GoodsActivity"/>
+        <activity android:name=".v.GoodDetailActivity"/>
     </application>
 
 </manifest>

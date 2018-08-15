@@ -3,10 +3,7 @@ package yonky.yiqikotlin.base.contract
 import yonky.yiqikotlin.base.BasePresenter
 import yonky.yiqikotlin.base.IBaseView
 import yonky.yiqikotlin.base.IPresenter
-import yonky.yiqikotlin.bean.GoodBean
-import yonky.yiqikotlin.bean.GoodFilterBean
-import yonky.yiqikotlin.bean.ShopBean
-import yonky.yiqikotlin.bean.ShopFilterBean
+import yonky.yiqikotlin.bean.*
 
 /**
  * Created by Administrator on 2018/7/16.
@@ -19,7 +16,7 @@ interface GoodContract{
         fun showError(msg:String,errorCode:Int)
     }
     interface Presenter: IPresenter<View> {
-        fun loadGoods(filter: GoodFilterBean, isLoadingMore:Boolean)
-        fun loadShop(filter: ShopFilterBean)
+        fun loadGoods(filter: Filter, isLoadingMore:Boolean)
+        fun loadShop(filter: Filter)
     }
 }

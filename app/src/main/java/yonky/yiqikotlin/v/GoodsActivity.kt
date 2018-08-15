@@ -4,13 +4,8 @@ import kotlinx.android.synthetic.main.activity_goods.*
 import yonky.yiqikotlin.R
 import yonky.yiqikotlin.base.BaseActivity
 import yonky.yiqikotlin.base.contract.GoodContract
-import yonky.yiqikotlin.bean.AreaBean
-import yonky.yiqikotlin.bean.GoodBean
-import yonky.yiqikotlin.bean.ShopBean
 import yonky.yiqikotlin.p.GoodPresenter
 import yonky.yiqikotlin.utils.StatusBarUtil
-import yonky.yiqikotlin.bean.ShopFilterBean
-import yonky.yiqikotlin.bean.GoodFilterBean
 import yonky.yiqikotlin.v.adapter.StyleAdapter
 import yonky.yiqikotlin.R.id.fab
 import yonky.yiqikotlin.utils.MyUtil
@@ -23,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.Glide
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.android.synthetic.main.shop.*
+import yonky.yiqikotlin.bean.*
 import yonky.yiqikotlin.utils.GlideUtil
 
 
@@ -37,13 +33,12 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
 
     val mPresenter:GoodPresenter by lazy{ GoodPresenter(this) }
 
-    var goodFilter: GoodFilterBean = GoodFilterBean()
-    var shopFilter: ShopFilterBean = ShopFilterBean()
-    var mGoodList: List<GoodBean>? = null
+//    var mGoodList: List<GoodBean>? = null
     lateinit var mAdapter: StyleAdapter
     var isLoadingMore=false
     var shopBean:ShopBean?=null
     var mdy:Int=0
+    lateinit var filter: Filter
 
 
     override fun getLayoutId(): Int= R.layout.activity_goods
@@ -62,16 +57,8 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
 
     override fun start() {
         mPresenter.attachView(this)
-        var areaBean=intent.getSerializableExtra("areabean") as AreaBean?
-        areaBean?.let{
-            Logger.d(areaBean)
-            goodFilter.shop_id=areaBean.shop_id
-            goodFilter.spm=areaBean.spm
-            goodFilter.zdid=areaBean.site_id
-            shopFilter.shop_id=areaBean.shop_id
-            shopFilter.spm=areaBean.spm
-            shopFilter.zdid=areaBean.site_id
-        }
+        filter =intent.getSerializableExtra("filter") as Filter
+
 //        mGoodList = ArrayList()
         mAdapter = StyleAdapter(this)
 
@@ -90,8 +77,8 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
         rv_goods.setAdapter(mAdapter)
 
 
-        mPresenter.loadGoods(goodFilter, false)
-        mPresenter.loadShop(shopFilter)
+        mPresenter.loadGoods(filter, false)
+        mPresenter.loadShop(filter)
 
 
         rv_goods.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -110,9 +97,9 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
                 if (lastItemPosition >= totalCount - 1 && dy > 0) {
                     if (!isLoadingMore) {
                         isLoadingMore = true
-                        val page = Integer.valueOf(goodFilter.pindex) + 1
-                        goodFilter.pindex=page.toString()
-                        mPresenter.loadGoods(goodFilter, true)
+                        val page = Integer.valueOf(filter.pindex) + 1
+                        filter.pindex=page.toString()
+                        mPresenter.loadGoods(filter, true)
                     }
                 }
 

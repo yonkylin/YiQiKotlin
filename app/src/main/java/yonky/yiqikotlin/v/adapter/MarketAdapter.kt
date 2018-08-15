@@ -2,11 +2,7 @@ package yonky.yiqikotlin.v.adapter
 
 import android.content.Context
 import yonky.yiqikotlin.bean.ShopBean
-import android.widget.TextView
-import yonky.yiqikotlin.R.id.iv_img
-import yonky.yiqikotlin.R.id.tv_position
 import android.support.v7.widget.RecyclerView
-import android.support.v4.content.ContextCompat.startActivity
 import yonky.yiqikotlin.v.GoodsActivity
 import android.content.Intent
 import android.support.annotation.NonNull
@@ -16,6 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_market.view.*
 import yonky.yiqikotlin.R
+import yonky.yiqikotlin.bean.AreaBean
+import yonky.yiqikotlin.bean.Filter
+import yonky.yiqikotlin.listener.MyClickListener
 
 
 /**
@@ -43,18 +42,19 @@ class MarketAdapter(private val mContext: Context) : RecyclerView.Adapter<Market
             holder.itemView.tv_major.text = "主营:" + item.major!!
             holder.itemView.tv_service.text = "服务:" + item.s_service!!
 
-            holder.itemView.setOnClickListener {
-                    goGoodsActivity(position)
-                }
+            val filter:Filter = convertFilter(beanList[position])
+            holder.itemView.setOnClickListener (MyClickListener(mContext,filter, MainAdapter.TYPE_GOODS))
 
         }
     }
 
-    private fun goGoodsActivity(position: Int) {
-        val bean = beanList[position]
-        val intent = Intent(mContext, GoodsActivity::class.java)
-        intent.putExtra("shopbean", bean)
-        mContext.startActivity(intent)
+
+    fun convertFilter(shopBean: ShopBean): Filter {
+        val filter= Filter()
+        filter.spm=shopBean.spm
+        filter.shop_id=shopBean.shop_id
+        filter.zdid=shopBean.site_id
+        return filter
     }
 
     inner class MarketHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

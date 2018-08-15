@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.item_vertical.view.*
 import yonky.yiqikotlin.R
 import yonky.yiqikotlin.bean.AreaBean
 import yonky.yiqikotlin.bean.AreaEBean
+import yonky.yiqikotlin.bean.Filter
 import yonky.yiqikotlin.utils.GlideUtil
 import yonky.yiqikotlin.listener.MyClickListener
 import yonky.yiqikotlin.utils.MyUtil
@@ -113,7 +114,7 @@ class MainAdapter(val mContext:Context): RecyclerView.Adapter<RecyclerView.ViewH
                 holder.itemView.banner.setOnBannerListener(){
                     position ->
                     val intent= Intent(mContext,GoodsActivity::class.java)
-                    intent.putExtra("areabean",bannerList!![position])
+                    intent.putExtra("filter",convertFilter(bannerList!![position]))
                     mContext.startActivity(intent)
 
                 }
@@ -175,8 +176,8 @@ class MainAdapter(val mContext:Context): RecyclerView.Adapter<RecyclerView.ViewH
                     }
 
                 }
-                Logger.d(11111)
-                holder.itemView.setOnClickListener(MyClickListener(mContext, bean, TYPE_GOODS))
+
+                holder.itemView.setOnClickListener(MyClickListener(mContext, convertFilter(bean!!), TYPE_GOODS))
             }
 
             holder is TwoViewHolder && position>14 ->{
@@ -193,12 +194,12 @@ class MainAdapter(val mContext:Context): RecyclerView.Adapter<RecyclerView.ViewH
                    var bean = eList!![i].m_Item2!![j]
                     bean?.let{
 
-                    GlideUtil.loadImage(bean.img_url!!,holder.itemView.iv_img)
+                    GlideUtil.loadImage(bean.img_url!!,holder.itemView.iv_shopImg)
                     holder.itemView.title.setText(bean.title);
                     holder.itemView.tv_price.setText(mContext.getResources().getString(R.string.price,bean.price));
 
                 }
-//                    holder.itemView.setOnClickListener MyClickListener(mContext, bean, TYPE_GOOD_DETAIL)
+                    holder.itemView.setOnClickListener (MyClickListener(mContext, convertFilter(bean), TYPE_GOOD_DETAIL))
             }
             }
 
@@ -228,6 +229,15 @@ class MainAdapter(val mContext:Context): RecyclerView.Adapter<RecyclerView.ViewH
 //        }
     }
 
+    fun convertFilter(areaBean: AreaBean): Filter {
+        val filter=Filter()
+        filter.spm=areaBean.spm
+        filter.goods_id=areaBean.goods_id
+        filter.shop_id=areaBean.shop_id
+        filter.zdid=areaBean.site_id
+        return filter
+    }
+
     inner class BannerViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     inner class TitleViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     inner class SingleViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
@@ -243,4 +253,6 @@ class MainAdapter(val mContext:Context): RecyclerView.Adapter<RecyclerView.ViewH
 
         }
     }
+
+
 }

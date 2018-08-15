@@ -5,10 +5,7 @@ import retrofit2.http.POST
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import yonky.yiqikotlin.bean.MainPageBean
-import yonky.yiqikotlin.bean.MarketBean
-import yonky.yiqikotlin.bean.ShopPage
-import yonky.yiqikotlin.bean.StyleBean
+import yonky.yiqikotlin.bean.*
 
 
 /**
@@ -96,14 +93,14 @@ interface ApiService {
     ): Observable<ShopPage>
     //    http://api2.17zwd.com/rest/goods/get_item?goods_id=106373882&from=android&user_id=-1&zdid=48&spm=c5jEjVMzAhEqMknXPYkPU9EOVa4gg6EKJId8KFy3%2BVE%3D
 
-   /* @GET("/rest/goods/{item}")
+    @GET("/rest/goods/{item}")
     fun getGoodDetail(@Path("item") item: String,
                       @Query("goods_id") goods_id: String,
                       @Query("from") from: String,
                       @Query("user_id") user_id: String,
                       @Query("zdid") zdid: String,
                       @Query("spm") spm: String
-    ): Observable<GoodDetailBean>*/
+    ): Observable<GoodDetailBean>
 
 
     //    http://api2.17zwd.com/rest/goods/get_colors?from=android&shadow$_klass_=class+com.hanyun.onlineproject.entity.NetRequest

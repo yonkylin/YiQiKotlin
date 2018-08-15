@@ -1,10 +1,12 @@
 package yonky.yiqikotlin.bean
 
+import java.io.Serializable
+
 /**
  * Created by Administrator on 2018/7/16.
  */
 
-class SkusBean {
+class SkusBean :Serializable{
     /**
      * price : 888
      * price2 : 868

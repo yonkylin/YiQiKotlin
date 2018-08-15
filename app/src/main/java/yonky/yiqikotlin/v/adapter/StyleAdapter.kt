@@ -1,23 +1,19 @@
 package yonky.yiqikotlin.v.adapter
 
 import android.content.Context
+import android.content.Intent
 import yonky.yiqikotlin.bean.GoodBean
 import android.support.v7.widget.RecyclerView
-import android.widget.TextView
-import yonky.yiqikotlin.R.id.tv_price
-import yonky.yiqikotlin.R.id.iv_img
-import yonky.yiqikotlin.R.id.tv_title
-import android.support.v4.content.ContextCompat.startActivity
-import android.content.Intent
 import android.support.annotation.NonNull
-import yonky.yiqikotlin.R.string.price
 import yonky.yiqikotlin.utils.GlideUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import kotlinx.android.synthetic.main.item_style.view.*
 import yonky.yiqikotlin.R
+import yonky.yiqikotlin.bean.AreaBean
+import yonky.yiqikotlin.bean.Filter
+import yonky.yiqikotlin.v.GoodDetailActivity
 
 
 /**
@@ -58,25 +54,33 @@ class StyleAdapter( var mContext:Context) : RecyclerView.Adapter<RecyclerView.Vi
     override fun onBindViewHolder(@NonNull holder: RecyclerView.ViewHolder, position: Int) {
         if (beanList.size != 0) {
             val bean = beanList[position]
-            GlideUtil.loadImage(bean.tb_img!!, (holder as StyleHolder).itemView.iv_img)
+            GlideUtil.loadImage(bean.tb_img!!, (holder as StyleHolder).itemView.iv_shopImg)
             holder.itemView.tv_title!!.text = bean.title
             holder.itemView.tv_price!!.setText(mContext.getResources().getString(R.string.price, bean.price2))
-//            holder.itemView.setOnClickListener(object : View.OnClickListener() {
-//                fun onClick(v: View) {
-//                    startDetail(position)
-//                }
-//            })
+            holder.itemView.setOnClickListener {
+                startDetail(position)
+
+            }
+
         }
 
 
     }
 
     private fun startDetail(position: Int) {
-        val bean = beanList[position]
-//        val intent = Intent(mContext, GoodDetailActivity::class.java)
-//        intent.putExtra("goodbean", bean)
-//        mContext.startActivity(intent)
+        val bean :GoodBean= beanList[position]
+        val intent = Intent(mContext, GoodDetailActivity::class.java)
+        intent.putExtra("filter", convertFilter(bean))
+        mContext.startActivity(intent)
 
+    }
+    fun convertFilter(goodBean: GoodBean): Filter {
+        val filter= Filter()
+        filter.spm=goodBean.spm
+        filter.goods_id=goodBean.goods_id
+        filter.shop_id=goodBean.shop_id
+        filter.zdid=goodBean.site_id
+        return filter
     }
 
     inner class StyleHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

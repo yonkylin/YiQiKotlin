@@ -3,14 +3,14 @@ package yonky.yiqikotlin.bean
 import android.os.Parcel
 import android.os.Parcelable.Creator
 import android.os.Parcelable
-
+import java.io.Serializable
 
 
 /**
  * Created by Administrator on 2018/7/16.
  */
 
-class GoodBean : Parcelable {
+class GoodBean : Serializable {
     /**
      * site_id : 48
      * shop_market_id : 274
@@ -48,7 +48,7 @@ class GoodBean : Parcelable {
 
     //    private static final long serialVersionUID = 1234567891;
 
-    var site_id: String? = null
+    var site_id: String = "48"
     var shop_market_id: Int = 0
     var shop_floor_id: Int = 0
     var shop_id: String? = null
@@ -81,7 +81,7 @@ class GoodBean : Parcelable {
     var spm: String? = null
     var wap_url: String? = null
 
-    class SkuAttributesBean {
+    class SkuAttributesBean :Serializable{
         /**
          * colors : 乳白色,白色,灰色,姜黄色,军绿色
          * sizes : S,M,L,XL,2XL
@@ -92,50 +92,5 @@ class GoodBean : Parcelable {
     }
 
 
-    override fun describeContents(): Int {
-        return 0
-    }
 
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeString(this.tb_img)
-        dest.writeString(this.site_id)
-        dest.writeDouble(this.price1)
-        dest.writeDouble(this.price2)
-        dest.writeString(this.shop_id)
-        dest.writeString(this.shop_tb_nick)
-        dest.writeString(this.goods_id)
-        dest.writeString(this.title)
-        dest.writeString(this.tb_imgs)
-        dest.writeString(this.spm)
-    }
-
-    constructor() {}
-
-    protected constructor(`in`: Parcel) {
-        this.tb_img = `in`.readString()
-        this.site_id = `in`.readString()
-        this.price1 = `in`.readDouble()
-        this.price2 = `in`.readDouble()
-        this.shop_id = `in`.readString()
-        this.shop_tb_nick = `in`.readString()
-        this.goods_id = `in`.readString()
-        this.title = `in`.readString()
-        this.tb_imgs = `in`.readString()
-        this.spm = `in`.readString()
-    }
-
-    companion object {
-
-        val CREATOR: Creator<GoodBean> = object : Creator<GoodBean> {
-            override fun createFromParcel(source: Parcel): GoodBean {
-                return GoodBean(source)
-            }
-
-            override fun newArray(size: Int): Array<GoodBean> {
-                return Array<GoodBean>(size){
-                    GoodBean()
-                }
-            }
-        }
-    }
 }
