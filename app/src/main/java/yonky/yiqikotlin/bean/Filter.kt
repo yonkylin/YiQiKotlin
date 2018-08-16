@@ -24,5 +24,5 @@ class Filter:Serializable{
     var mid:String? = ""
     var fid:String? = ""
     var keyword:String? = ""
-
+    var kind:String?=null
 }

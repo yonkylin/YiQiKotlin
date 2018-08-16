@@ -17,8 +17,8 @@ class SkusBean :Serializable{
      * img_url : https://img.alicdn.com/bao/uploaded/i1/2489702925/TB2c65mlv5TBuNjSspcXXbnGFXa_!!2489702925.jpg
      */
 
-    var price: Int = 0
-    var price2: Int = 0
+    var price: Float = 0f
+    var price2: Float = 0f
     var properties: String? = null
     var properties_name: String? = null
     var num: Int = 0

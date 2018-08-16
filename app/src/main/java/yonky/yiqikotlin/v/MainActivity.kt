@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.PagerAdapter
+import android.view.KeyEvent
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.FrameLayout
 import android.widget.PopupWindow
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
@@ -13,23 +15,23 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import kotlinx.android.synthetic.main.activity_main.*
 import yonky.yiqikotlin.R
 import yonky.yiqikotlin.base.BaseActivity
-import yonky.yiqikotlin.v.fragment.TestFragment
 import yonky.yiqikotlin.base.BaseFragment
 import android.widget.TextView
 import com.google.android.flexbox.FlexDirection.ROW
 import com.google.android.flexbox.FlexWrap.WRAP
 import com.google.android.flexbox.FlexboxLayoutManager
+import com.squareup.haha.perflib.Main
 import kotlinx.android.synthetic.main.tab_item.*
 import kotlinx.android.synthetic.main.tab_item.view.*
 import kotlinx.android.synthetic.main.topbar.*
 import kotlinx.android.synthetic.main.window_region.*
 import kotlinx.android.synthetic.main.window_region.view.*
 import yonky.yiqikotlin.MyListener
+import yonky.yiqikotlin.showToast
 import yonky.yiqikotlin.utils.MyUtil
 import yonky.yiqikotlin.utils.StatusBarUtil
 import yonky.yiqikotlin.v.adapter.RegionAdapter
-import yonky.yiqikotlin.v.fragment.MainFragment
-import yonky.yiqikotlin.v.fragment.MarketFragment
+import yonky.yiqikotlin.v.fragment.*
 
 
 /**
@@ -39,8 +41,11 @@ class MainActivity:BaseActivity(),MyListener{
 
 
     val fragments=ArrayList<BaseFragment>()
-    var mainFragment:BaseFragment?=null
+    val mainFragment:BaseFragment=MainFragment()
     val marketFragment:BaseFragment=MarketFragment()
+    val styleFragment:BaseFragment=StyleFragment()
+    val loginFragment:BaseFragment=LoginFragment()
+    val myFragment:BaseFragment=MyFragment()
 
 
 
@@ -65,12 +70,11 @@ class MainActivity:BaseActivity(),MyListener{
         preference=getSharedPreferences("data",0)
         regionSelected=preference.getString("region","广州")
 
-         mainFragment=MainFragment()
-       fragments.add(mainFragment!!)
+       fragments.add(mainFragment)
        fragments.add(marketFragment)
-       fragments.add(TestFragment())
-       fragments.add(TestFragment())
-       fragments.add(TestFragment())
+       fragments.add(styleFragment)
+       fragments.add(loginFragment)
+       fragments.add(myFragment)
 
 
     }
@@ -85,7 +89,13 @@ class MainActivity:BaseActivity(),MyListener{
 
         val pagerAdaper =ViewPagerAdaper(supportFragmentManager,fragments)
         viewpager.adapter = pagerAdaper
-        tab_layout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(viewpager))
+        tab_layout.addOnTabSelectedListener(object:TabLayout.ViewPagerOnTabSelectedListener(viewpager){
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                super.onTabSelected(tab)
+                val mCurrentPosition=tab_layout.selectedTabPosition
+                setToolBar(mCurrentPosition)
+            }
+        })
 
         bt_region.setOnClickListener(){
             showRegion()
@@ -168,6 +178,7 @@ class MainActivity:BaseActivity(),MyListener{
     }
 
 
+
     //设置底部Tab文字及图标
     private fun setTabs(tabLayout: TabLayout, inflater: LayoutInflater, icons: Array<Int>, titles: Array<String>) {
         for (i in titles.indices) {
@@ -183,8 +194,31 @@ class MainActivity:BaseActivity(),MyListener{
         }
     }
 
+    private fun setToolBar(position: Int) {
+        if (position >= 3) {
+            toolbar.setVisibility(View.GONE)
+        } else {
+            toolbar.setVisibility(View.VISIBLE)
+        }
+
+    }
+
     override fun onClick() {
         mPopupWindow!!.dismiss()
         updateButton()
+    }
+
+    private var mExitTime: Long = 0
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (System.currentTimeMillis().minus(mExitTime) <= 2000) {
+                finish()
+            } else {
+                mExitTime = System.currentTimeMillis()
+                showToast("再按一次退出程序")
+            }
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }

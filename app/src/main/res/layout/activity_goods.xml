@@ -72,15 +72,20 @@
         app:layout_anchor="@+id/ll"
         app:layout_anchorGravity="right|bottom"
         app:rippleColor="@color/white"/>
-
+<yonky.multiple_status_view.MultipleStatusView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_goods"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:paddingBottom="50dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
         />
+</yonky.multiple_status_view.MultipleStatusView>
+
 
     <LinearLayout
         android:id="@+id/ll"

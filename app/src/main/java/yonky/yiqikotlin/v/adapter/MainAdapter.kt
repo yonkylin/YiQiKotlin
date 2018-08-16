@@ -238,6 +238,7 @@ class MainAdapter(val mContext:Context): RecyclerView.Adapter<RecyclerView.ViewH
         return filter
     }
 
+
     inner class BannerViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     inner class TitleViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)
     inner class SingleViewHolder(itemView: View):RecyclerView.ViewHolder(itemView)

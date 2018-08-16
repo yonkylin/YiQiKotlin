@@ -20,6 +20,8 @@ class GoodPresenter(context: Context):BasePresenter<GoodContract.View>(),GoodCon
         DataManager()
     }
     override fun loadGoods(filter: Filter, isLoadingMore: Boolean) {
+        checkViewAttached()
+        mRootView?.showLoading()
         val disposable = mDataManager.getStyleData(filter.shop_id,filter.size,filter.seller_cid,filter.pindex,filter.from,filter.price2,
                 filter.dtype,filter.zdid, filter.price1,filter.psize,filter.orderby,filter.color ,filter.spm,filter.keyword,filter.mid,filter.fid)
                 .map { styleBean -> styleBean.goods_items_list_get_response?.items }

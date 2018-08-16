@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import yonky.multiple_status_view.MultipleStatusView
 import yonky.yiqikotlin.utils.CleanLeakUtils
 
 /**
@@ -11,6 +13,7 @@ import yonky.yiqikotlin.utils.CleanLeakUtils
  */
 abstract  class BaseActivity:AppCompatActivity(){
 
+    var mLayoutStatusView: MultipleStatusView?=null
     lateinit var mContext: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +23,11 @@ abstract  class BaseActivity:AppCompatActivity(){
         App.instance?.addActivity(this)
         initData()
         initView()
+        start()
+        mLayoutStatusView?.setOnClickListener(mRetryClickListener)
+    }
+
+    open val mRetryClickListener = View.OnClickListener {
         start()
     }
 

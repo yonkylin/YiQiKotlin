@@ -17,10 +17,10 @@ abstract class BaseFragment: Fragment(){
     var isViewPrepare = false
     var hasLoadData = false
     var mLayoutStatusView: MultipleStatusView? = null
-    override fun onAttach(context: Context?) {
-        context?.let{
+    override fun onAttach(context: Context) {
+
             mContext = context
-        }
+
         super.onAttach(context)
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -54,7 +54,7 @@ abstract class BaseFragment: Fragment(){
     @LayoutRes
     abstract fun getLayoutId():Int
 
-     fun lazyLoadDataIfPrepared(){
+    open fun lazyLoadDataIfPrepared(){
         if(userVisibleHint && isViewPrepare &&!hasLoadData){
             lazyLoad()
             hasLoadData = true

@@ -150,8 +150,12 @@ class MarketFragment : BaseFragment(), MarketContract.View {
                 }
 
             }
-        }
-        )    }
+        })
+
+        fab.setOnClickListener { rv_market.smoothScrollToPosition(0) }
+
+
+    }
 
 
     override fun lazyLoad() {

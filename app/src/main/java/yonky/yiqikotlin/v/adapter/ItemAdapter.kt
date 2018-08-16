@@ -13,6 +13,8 @@ import yonky.yiqikotlin.v.adapter.MainAdapter.Companion.TYPE_ITEM_MY
 import yonky.yiqikotlin.v.adapter.MainAdapter.Companion.TYPE_ITEM_TJBB
 import yonky.yiqikotlin.utils.GlideUtil
 import com.ashokvarma.bottomnavigation.utils.Utils.dp2px
+import yonky.yiqikotlin.bean.Filter
+import yonky.yiqikotlin.listener.MyClickListener
 import yonky.yiqikotlin.utils.MyUtil
 import yonky.yiqikotlin.v.adapter.MainAdapter.Companion.TYPE_GOODS
 import yonky.yiqikotlin.v.adapter.MainAdapter.Companion.TYPE_SERVICE
@@ -45,6 +47,19 @@ class ItemAdapter(val context:Context): RecyclerView.Adapter<ItemAdapter.ItemVie
                 layoutParams.height = MyUtil.dp2px(context, 100)
                 holder.itemView.iv.layoutParams = layoutParams
                 holder.itemView.iv.setImageResource(drawables[position])
+                val filter = Filter()
+                when(position){
+                    0-> {
+                        filter.dtype="mrxk"
+                        filter.kind="每日新款"
+                        holder.itemView.setOnClickListener(MyClickListener(context,filter,TYPE_SERVICE))
+                    }
+                    1->{
+                        filter.dtype="mtsp"
+                        filter.kind="模特实拍"
+                        holder.itemView.setOnClickListener(MyClickListener(context,filter,TYPE_SERVICE))
+                    }
+                }
             }
             TYPE_ITEM_TJBB -> {
                 layoutParams.width = MyUtil.dp2px(context, 130)
@@ -56,10 +71,10 @@ class ItemAdapter(val context:Context): RecyclerView.Adapter<ItemAdapter.ItemVie
                     url?.let{
                         GlideUtil.loadImage(url, holder.itemView.iv)
                     }
+                    val filter =convertFilter(b2List!![position])
+                    holder.itemView.setOnClickListener(MyClickListener(context, filter, TYPE_GOODS))
                 }
 
-
-//                holder.itemView.setOnClickListener(MyClickListener(mContext, b2List[position], TYPE_GOODS))
             }
             TYPE_ITEM_MRXK -> {
                 layoutParams.width = MyUtil.dp2px(context, 200)
@@ -71,11 +86,10 @@ class ItemAdapter(val context:Context): RecyclerView.Adapter<ItemAdapter.ItemVie
                     url?.let{
                         GlideUtil.loadImage(url, holder.itemView.iv)
                     }
+                    val filter =convertFilter(dList!![position])
+                    holder.itemView.setOnClickListener(MyClickListener(context, filter, TYPE_GOODS))
                 }
 
-
-
-//                holder.itemView.setOnClickListener(MyClickListener(mContext, dList[position], TYPE_GOODS))
             }
         }
 
@@ -88,6 +102,16 @@ class ItemAdapter(val context:Context): RecyclerView.Adapter<ItemAdapter.ItemVie
             TYPE_ITEM_MRXK -> return dList?.size?:0
             else -> return 0
         }
+    }
+
+
+    fun convertFilter(areaBean: AreaBean): Filter {
+        val filter= Filter()
+        filter.spm=areaBean.spm
+        filter.goods_id=areaBean.goods_id
+        filter.shop_id=areaBean.shop_id
+        filter.zdid=areaBean.site_id
+        return filter
     }
 
     class ItemViewHolder(itemView:View):RecyclerView.ViewHolder(itemView)

@@ -19,7 +19,7 @@ interface StyleContract {
     }
 
     interface Presenter : IPresenter<View> {
-        fun loadDatas(filter: GoodFilterBean, isLoadingMore: Boolean)
+        fun loadDatas(filter: Filter, isLoadingMore: Boolean)
         fun getGoodColor(type: String)
     }
 

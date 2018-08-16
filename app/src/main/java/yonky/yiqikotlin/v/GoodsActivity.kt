@@ -1,5 +1,6 @@
 package yonky.yiqikotlin.v
 
+import android.content.Intent
 import kotlinx.android.synthetic.main.activity_goods.*
 import yonky.yiqikotlin.R
 import yonky.yiqikotlin.base.BaseActivity
@@ -17,13 +18,12 @@ import yonky.yiqikotlin.v.adapter.StyleAdapter.Companion.TYPE_NODATA
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.Glide
 import jp.wasabeef.glide.transformations.BlurTransformation
+import kotlinx.android.synthetic.main.my_recyclerview.*
 import kotlinx.android.synthetic.main.shop.*
 import yonky.yiqikotlin.bean.*
+import yonky.yiqikotlin.net.exception.ErrorStatus
+import yonky.yiqikotlin.showToast
 import yonky.yiqikotlin.utils.GlideUtil
-
-
-
-
 
 
 /**
@@ -32,7 +32,6 @@ import yonky.yiqikotlin.utils.GlideUtil
 class GoodsActivity:BaseActivity(), GoodContract.View{
 
     val mPresenter:GoodPresenter by lazy{ GoodPresenter(this) }
-
 //    var mGoodList: List<GoodBean>? = null
     lateinit var mAdapter: StyleAdapter
     var isLoadingMore=false
@@ -44,6 +43,7 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
     override fun getLayoutId(): Int= R.layout.activity_goods
 
     override fun initData() {
+        mPresenter.attachView(this)
     }
 
     override fun initView() {
@@ -52,11 +52,19 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
         toolbar.background.mutate().alpha=0
         fab.hide()
 
+        mLayoutStatusView = status_view
 
+        tv_dkjj.setOnClickListener {
+            if(shopBean!=null){
+                val intent= Intent(mContext,ActivityFragment::class.java)
+                intent.putExtra("shopbean",shopBean)
+                mContext.startActivity(intent)
+            }
+        }
     }
 
     override fun start() {
-        mPresenter.attachView(this)
+
         filter =intent.getSerializableExtra("filter") as Filter
 
 //        mGoodList = ArrayList()
@@ -82,9 +90,9 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
 
 
         rv_goods.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                val firstItemPosition = (recyclerView!!.layoutManager as GridLayoutManager).findFirstVisibleItemPosition()
+                val firstItemPosition = (recyclerView.layoutManager as GridLayoutManager).findFirstVisibleItemPosition()
                 val lastItemPosition = (recyclerView.layoutManager as GridLayoutManager).findLastVisibleItemPosition()
                 val totalCount = recyclerView.layoutManager.itemCount
                 if (firstItemPosition < 2 || dy > 0) {
@@ -114,6 +122,7 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
     }
 
     override fun showResult(list: List<GoodBean>, loadingMore: Boolean) {
+        mLayoutStatusView?.showContent()
         Logger.d(list)
         if(loadingMore){
             isLoadingMore=false;
@@ -129,10 +138,8 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
         this.shopBean=shopBean
         GlideUtil.loadRoundImage(shopBean.serller_head_original!!, iv_avatar)
         tv_shop_name.setText(shopBean.shop_name)
-//        mToolbar.setTitle(shopBean.getShop_name());
         tv_position.setText(shopBean.market + "-" + shopBean.floor+ "-" + shopBean.dangkou)
         val blurTransformation = BlurTransformation(15, 2)
-//        MultiTransformation multi= new MultiTransformation(new BlurTransformation(15,2),new ColorFilterTransformation(R.color.light_gray));
         Glide.with(this).load(shopBean.serller_head_original)
                 .apply(RequestOptions.bitmapTransform(blurTransformation))
                 .into(iv_shop)
@@ -144,6 +151,7 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
     }
 
     override fun showLoading() {
+        mLayoutStatusView?.showLoading()
     }
 
     override fun dismissLoading() {
@@ -151,6 +159,11 @@ class GoodsActivity:BaseActivity(), GoodContract.View{
     }
 
     override fun showError(msg: String, errorCode: Int) {
+        showToast(msg)
+        if(errorCode== ErrorStatus.NETWORK_ERROR)
+            mLayoutStatusView?.showNoNetwork()
+        else mLayoutStatusView?.showError()
+
 
     }
 
